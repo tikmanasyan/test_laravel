@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Mail\SendMailVerification;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     public function index() {
         //gnalu e logini ej
@@ -14,18 +18,33 @@ class AuthController extends Controller
 
     public function register_view() {
         //gnalu e registraciayi ej
+        return view("auth.register");
     }
 
-    public function register() {
+    public function register(RegisterRequest $request) {
         //kazmakerpelu e registracia
-        $keys = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-        $code = "";
-        for($i = 1; $i <= 12; $i++) {
-            $code .= $keys[rand(0, count($keys) - 1)];
+        $avatar = "";
+        $verify_code = Parent::make_hashed_code(6);
+        if($request->file("avatar")) {
+            $ext = $request->file("avatar")->extension();
+            $avatar = time() . "." . $ext;
+            $request->file("avatar")->move(
+                public_path("assets/uploads/"), $avatar);
         }
 
-        return $code;
+        $data = [
+            "name" => $request['full_name'],
+            "birth_date" => $request['birth_date'],
+            "gender" => $request['gender'],
+            "avatar" => $avatar,
+            "email" => $request['email'],
+            "password" => Hash::make($request['password']),
+            "role_id" => 1,
+            "verification_code" =>  $verify_code
+        ];
 
+        Mail::to($request['email'])->send(new SendMailVerification(['code' => $verify_code]));
+        User::create($data);
     }
 
     public function login(LoginRequest $request) {
