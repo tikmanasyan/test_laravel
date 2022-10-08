@@ -12,7 +12,6 @@ class BaseController extends Controller
         for($i = 1; $i <= $length; $i++) {
             $code .= $keys[rand(0, count($keys) - 1)];
         }
-
         return $code;
     }
 }
