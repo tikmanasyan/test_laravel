@@ -25,7 +25,8 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger("role_id");
             $table->string("verification_code")->default(null);
             $table->timestamps();
-            $table->foreign("role_id")->references("id")->on("roles");
+            $table->foreign("role_id")
+                ->references("id")->on("roles");
         });
     }
 

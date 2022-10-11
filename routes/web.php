@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(["guest"])->group(function() {
@@ -28,5 +29,13 @@ Route::middleware(["auth"])->group(function() {
         ->name("logout");
 
     Route::resource("categories", CategoryController::class);
+
+
+    //Product
+    Route::prefix("/products")->group(function() {
+        Route::get("/", [ProductController::class, "index"])->name("all-products");
+        Route::get("/create", [ProductController::class, "create"])->name("create-product");
+        Route::post("/create", [ProductController::class, "store"])->name("store-product");
+    });
 });
 
