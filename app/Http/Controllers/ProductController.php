@@ -48,4 +48,16 @@ class ProductController extends Controller
             return redirect()->route("all-products")->with("success", "Product created");
         }
     }
+
+    public function filter_by_category($id) {
+        $products = DB::table("products")
+            ->join("categories", "products.category_id", "=", "categories.id")
+            ->select(
+                "products.name AS product",
+                "products.price AS price",
+                "categories.name AS category")
+            ->where("products.category_id", "=", $id)
+            ->get();
+        return view("dash.categories.category_products", ['products' => $products]);
+    }
 }

@@ -20,6 +20,7 @@
                         <td>{{ $category->created_at }}</td>
                         <td>
                             <a class="btn btn-success" href="{{ route("categories.show", $category->id) }}">Details</a>
+                            <a class="btn btn-warning" href="{{ route("category-products", $category->id) }}">Show Products</a>
                         </td>
                     </tr>
                 @endforeach

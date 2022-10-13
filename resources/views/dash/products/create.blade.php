@@ -3,6 +3,9 @@
 @section("content")
     <div class="container">
         <div class="mt-3">
+            <div class="mt-2 mb-2">
+                <a href="{{ route("all-products") }}" class="btn btn-secondary">Back</a>
+            </div>
             <form action="{{ route('store-product') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">

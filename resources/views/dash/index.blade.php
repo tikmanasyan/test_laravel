@@ -4,5 +4,6 @@
     <div class="container">
         <h1>Welcome {{ Auth::user()->name }}</h1>
         <a href="{{ route("categories.index") }}">Categories</a>
+        <a href="{{ route("all-products") }}">Products</a>
     </div>
 @endsection
