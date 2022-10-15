@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendPostMail;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,15 @@ class PostController extends Controller
             "user_id" => Auth::user()->id
         ];
 
-        Post::create($data);
+        $store = Post::create($data);
+
+        if($store) {
+            event(new SendPostMail(
+                Auth::user()->name,
+                Auth::user()->email,
+                $data['title']
+            ));
+        }
     }
 
     public function edit($id) {
